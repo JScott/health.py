@@ -1,5 +1,5 @@
 #!/usr/local/bin/python3
-
+import time
 import click
 import httplib2
 
@@ -12,17 +12,23 @@ def request(url):
     http = httplib2.Http(".cache")
     return http.request(url, "GET")
 
-@click.command()
-@click.option('--frequency', default=1, help='Seconds between pings.')
-@click.option('--url', default="http://localhost:12345/", help='URL to ping.')
-@click.option('--timeout', default=10, help='Seconds to wait for a response.')
-def check(frequency, url, timeout):
-    """Not a great health checker"""
+def check(url, timeout):
+    """Check the URL for server health"""
     response, content = request(url)
     if is_healthy(content):
         print("good!")
     else:
         print("bad!")
 
+@click.command()
+@click.option('--frequency', default=1.0, help='Seconds between pings.')
+@click.option('--url', default="http://localhost:12345/", help='URL to ping.')
+@click.option('--timeout', default=1.0, help='Seconds to wait for a response.')
+def daemon(frequency, url, timeout):
+    """A loop for health checking"""
+    while True:
+        check(url, timeout)
+        time.sleep(frequency)
+
 if __name__ == '__main__':
-    check()
+    daemon()
