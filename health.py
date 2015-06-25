@@ -7,11 +7,12 @@ import httplib2
 URL = 'http://localhost:12345/'
 DATABASE_FILE = 'data_points.db'
 
-def initialize_database(file_name):
+def initialize_database(file_name, sample_size):
     """Set up the database connection"""
-    database = shelve.open(file_name)
+    database = shelve.open(file_name, flag='w')
     if 'index' not in database:
         database['index'] = 0
+    database['sample_size'] = sample_size
     return database
 
 def increment_index(database, sample_size):
@@ -50,7 +51,7 @@ def store(data, database, sample_size):
 @click.option('--sample_size', default=10, help='The max data point count.')
 def daemon(interval, caching_enabled, sample_size):
     """A loop for health checking"""
-    database = initialize_database(DATABASE_FILE)
+    database = initialize_database(DATABASE_FILE, sample_size)
     while True:
         data = check(URL, caching_enabled)
         store(data, database, sample_size)
