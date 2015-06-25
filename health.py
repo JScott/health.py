@@ -9,7 +9,7 @@ DATABASE_FILE = 'data_points.db'
 
 def initialize_database(file_name, sample_size):
     """Set up the database connection"""
-    database = shelve.open(file_name, flag='w')
+    database = shelve.open(file_name, flag='wu')
     if 'index' not in database:
         database['index'] = 0
     database['sample_size'] = sample_size
