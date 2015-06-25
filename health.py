@@ -4,7 +4,7 @@ import shelve
 import click
 import httplib2
 
-URL = "http://localhost:12345/"
+URL = 'http://localhost:12345/'
 
 def initialize_database(file_name):
     """Set up the database connection"""
@@ -47,9 +47,10 @@ def store(data, database, sample_size):
 @click.option('--interval', default=1.0, help='Seconds between pings.')
 @click.option('--caching_enabled', is_flag=True, help='Are responses cached?')
 @click.option('--sample_size', default=10, help='The max data point count.')
-def daemon(interval, caching_enabled, sample_size):
+@click.option('--database_file', default='data_points.db', help='Where to store data.')
+def daemon(interval, caching_enabled, sample_size, database_file):
     """A loop for health checking"""
-    database = initialize_database('data_points.db')
+    database = initialize_database(database_file)
     while True:
         data = check(URL, caching_enabled)
         store(data, database, sample_size)
