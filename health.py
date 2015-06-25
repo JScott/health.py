@@ -14,8 +14,10 @@ def request(url):
 
 def check(url):
     """Check the URL for server health"""
+    start = time.time()
     response, content = request(url)
-    return is_valid(content)
+    seconds_elapsed = time.time() - start
+    return (is_valid(content), seconds_elapsed)
 
 @click.command()
 @click.option('--frequency', default=1.0, help='Seconds between pings.')
@@ -23,10 +25,8 @@ def check(url):
 def daemon(frequency, url):
     """A loop for health checking"""
     while True:
-        start = time.time()
-        is_up = check(url)
-        seconds_elapsed = time.time() - start
-        print(is_up, seconds_elapsed)
+        is_up, response_time = check(url)
+        print(is_up, response_time)
         time.sleep(frequency)
 
 if __name__ == '__main__':
