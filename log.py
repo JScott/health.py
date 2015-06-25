@@ -1,11 +1,8 @@
 #!/usr/local/bin/python3
 import time
 import shelve
-import click
-import httplib2
 
-URL = 'http://localhost:12345/'
-DATABASE_FILE = 'data_points.db'
+URL = "http://localhost:12345/"
 
 def initialize_database(file_name):
     """Set up the database connection"""
@@ -50,7 +47,7 @@ def store(data, database, sample_size):
 @click.option('--sample_size', default=10, help='The max data point count.')
 def daemon(interval, caching_enabled, sample_size):
     """A loop for health checking"""
-    database = initialize_database(DATABASE_FILE)
+    database = initialize_database('data_points.db')
     while True:
         data = check(URL, caching_enabled)
         store(data, database, sample_size)
