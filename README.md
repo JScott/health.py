@@ -10,8 +10,10 @@ Each tool has a `--help` flag to find more info about the tool.
 
 ## TODO
 
+- TESTS. I feel dirty.
 - Break things into modules
 - Have a centralized module deal with derived data
+- PID and log files for the processes
 - More useful output:
     - IRC
     - Slack
