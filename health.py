@@ -12,7 +12,7 @@ def request(url):
     http = httplib2.Http(".cache")
     return http.request(url, "GET")
 
-def check(url, timeout):
+def check(url):
     """Check the URL for server health"""
     response, content = request(url)
     if is_healthy(content):
@@ -23,11 +23,10 @@ def check(url, timeout):
 @click.command()
 @click.option('--frequency', default=1.0, help='Seconds between pings.')
 @click.option('--url', default="http://localhost:12345/", help='URL to ping.')
-@click.option('--timeout', default=1.0, help='Seconds to wait for a response.')
-def daemon(frequency, url, timeout):
+def daemon(frequency, url):
     """A loop for health checking"""
     while True:
-        check(url, timeout)
+        check(url)
         time.sleep(frequency)
 
 if __name__ == '__main__':
