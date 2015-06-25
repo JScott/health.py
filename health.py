@@ -3,7 +3,7 @@ import time
 import click
 import httplib2
 
-def is_healthy(utf8_content):
+def is_valid(utf8_content):
     """Was the request fulfilled as expected?"""
     return 'Magnificent!' in utf8_content.decode("utf-8")
 
@@ -15,10 +15,7 @@ def request(url):
 def check(url):
     """Check the URL for server health"""
     response, content = request(url)
-    if is_healthy(content):
-        print("good!")
-    else:
-        print("bad!")
+    return is_valid(content)
 
 @click.command()
 @click.option('--frequency', default=1.0, help='Seconds between pings.')
@@ -26,7 +23,10 @@ def check(url):
 def daemon(frequency, url):
     """A loop for health checking"""
     while True:
-        check(url)
+        start = time.time()
+        is_up = check(url)
+        seconds_elapsed = time.time() - start
+        print(is_up, seconds_elapsed)
         time.sleep(frequency)
 
 if __name__ == '__main__':
