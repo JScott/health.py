@@ -3,10 +3,9 @@
 import click
 import httplib2
 
-def is_healthy(content):
+def is_healthy(utf8_content):
     """Was the request fulfilled as expected?"""
-    return True
-    # return 'Magnificent!' in content
+    return 'Magnificent!' in utf8_content.decode("utf-8")
 
 def request(url):
     """Send a GET request to the given URL"""
